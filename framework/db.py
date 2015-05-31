@@ -145,8 +145,8 @@ class _Engine(object):
         return self._connect()
 
 def create_engine(user, password, database, host='127.0.0.1', port=3306, **kw):
-    #import mysql.connector
-    import MySQLdb
+    import mysql.connector
+    #import MySQLdb
     global engine
     if engine is not None:
         raise DBError('Engine is already initialized.')

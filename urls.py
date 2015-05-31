@@ -11,15 +11,15 @@ from framework.apis import api, Page, APIError, APIValueError, APIPermissionErro
 import os.path
 import os, re, time, base64, hashlib, logging
 from config import configs
-import sae.storage
-import markdown2
+#import sae.storage
+#import markdown2
 from framework import db
 import random
-_COOKIE_NAME = 'jblog'
+_COOKIE_NAME = 'blog'
 _COOKIE_KEY = configs.session.secret
 CHUNKSIZE = 8192
 UPLOAD_PATH='upload'
-SAE_BUCKET = configs.storage['bucket']
+#SAE_BUCKET = configs.storage['bucket']
 
 def tag_count_add(tag):
     tag.number+=1
@@ -58,15 +58,16 @@ def render_blogs(blogs):
     return blogs
 
 
-@view('content.html')
+@view('imitation.html')#@view('content.html')
 @get('/')
 def all_blogs():
-    blogs = Blog.find_all()
+    '''blogs = Blog.find_all()
     blogs = sorted(blogs,key=lambda blog:blog.created_at,reverse=True)
     blogs = render_blogs(blogs)
     user = ctx.request.user
-    return dict(blogs=blogs,user=user)
-
+    return dict(blogs=blogs,user=user)'''
+    user = ctx.request.user
+    return dict(user=user)
 @view('content.html')
 @get('/tag/:tag_id')
 def tag_blogs(tag_id):
@@ -155,7 +156,7 @@ def check_admin():
     raise APIPermissionError('No permission.')
 
 def upload(image):
-    filename = os.path.join(UPLOAD_PATH,hashlib.md5(image.filename.encode('utf-8')).hexdigest()+uuid.uuid4().hex)
+    '''filename = os.path.join(UPLOAD_PATH,hashlib.md5(image.filename.encode('utf-8')).hexdigest()+uuid.uuid4().hex)
     if 'SERVER_SOFTWARE' in os.environ:
        conn = sae.storage.Connection() 
        bucket = conn.get_bucket(SAE_BUCKET)
@@ -168,7 +169,7 @@ def upload(image):
             while chunk:
                 f.write(chunk)
                 chunk = image.file.read(CHUNKSIZE)
-    return filename
+    return filename'''
 
 def delete_upload(filename):
     if 'SERVER_SOFTWARE' in os.environ:
